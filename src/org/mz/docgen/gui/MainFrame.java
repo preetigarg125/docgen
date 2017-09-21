@@ -1,12 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 Metazone Infotech Pvt Ltd
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package project2;
+package org.mz.docgen.gui;
 
+import org.mz.docgen.service.getDocumentGenerator;
+import org.mz.docgen.service.DocumentGenerator;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -16,23 +31,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Payal
  */
 
-public class Documentgeneration extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame {
 
     JFileChooser fileChooser,fileChooser1;
     String nameFiles=" ";
     File[] file;
     File path;
-    ButtonGroup buttonGroup=new ButtonGroup();
+   // ButtonGroup buttonGroup=new ButtonGroup();
     DocumentGenerator dc;
     boolean flag=true,flag1=true;
     String[] strArray=new String[10];
-    public Documentgeneration() {
+     DefaultListModel listModel;
+    public MainFrame() {
         initComponents();
-        buttonGroup.add(singleRadioBtn);
-        buttonGroup.add(multipleRadioBtn);
         String userhome = System.getProperty("user.home");
         fileChooser = new JFileChooser(userhome + "\\Documents\\Images");
         nameField2.setEditable(false);
+        nameField1.setEditable(false);
+         checkBox.setSelected(false);
     }
 
     /**
@@ -45,15 +61,21 @@ public class Documentgeneration extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        nameField = new javax.swing.JTextField();
+        jMenuItem1 = new javax.swing.JMenuItem();
         browseBtn = new javax.swing.JButton();
         nameField1 = new javax.swing.JTextField();
         browseBtn1 = new javax.swing.JButton();
-        singleRadioBtn = new javax.swing.JRadioButton();
-        multipleRadioBtn = new javax.swing.JRadioButton();
         pdfBtn = new javax.swing.JButton();
         docBtn = new javax.swing.JButton();
         nameField2 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        fileChooserJList = new javax.swing.JList();
+        checkBox = new javax.swing.JCheckBox();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,16 +86,14 @@ public class Documentgeneration extends javax.swing.JFrame {
             }
         });
 
+        nameField1.setEditable(false);
+
         browseBtn1.setText("Browse");
         browseBtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseBtn1ActionPerformed(evt);
             }
         });
-
-        singleRadioBtn.setText("Single");
-
-        multipleRadioBtn.setText("Multiple");
 
         pdfBtn.setText("Generate Pdf");
         pdfBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -89,57 +109,73 @@ public class Documentgeneration extends javax.swing.JFrame {
             }
         });
 
+        fileChooserJList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fileChooserJListKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(fileChooserJList);
+
+        checkBox.setText("Create Multiple Documents");
+
+        jMenu1.setText("Help");
+
+        jMenuItem2.setText("About");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addContainerGap(35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkBox)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nameField1)
-                            .addComponent(nameField))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(pdfBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(docBtn))
+                            .addComponent(nameField1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(nameField2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(nameField2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(browseBtn))
-                            .addComponent(browseBtn1, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(39, 39, 39))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pdfBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-                        .addComponent(docBtn)
-                        .addGap(159, 159, 159))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(singleRadioBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(multipleRadioBtn)
-                        .addGap(195, 195, 195))))
+                            .addComponent(browseBtn)
+                            .addComponent(browseBtn1))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(browseBtn)
-                    .addComponent(nameField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(browseBtn)
+                        .addComponent(nameField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseBtn1))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(singleRadioBtn)
-                    .addComponent(multipleRadioBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
+                .addComponent(checkBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pdfBtn)
                     .addComponent(docBtn))
-                .addGap(40, 40, 40))
+                .addGap(85, 85, 85))
         );
 
         pack();
@@ -147,7 +183,7 @@ public class Documentgeneration extends javax.swing.JFrame {
 
     private void docBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docBtnActionPerformed
         dc=getDocumentGenerator.getDocument("doc");
-        if(singleRadioBtn.isSelected())
+        if(checkBox.isSelected())
         {
             dc.generateSingleDocument(file,path);
         }
@@ -158,7 +194,7 @@ public class Documentgeneration extends javax.swing.JFrame {
     }//GEN-LAST:event_docBtnActionPerformed
 
     private void browseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseBtnActionPerformed
-        nameField.setText(" ");
+        listModel = new DefaultListModel();
         nameField2.setText(" ");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.resetChoosableFileFilters();
@@ -167,10 +203,13 @@ public class Documentgeneration extends javax.swing.JFrame {
         fileChooser.showOpenDialog(null);
         file = fileChooser.getSelectedFiles();
         for (int i = 0; i < file.length; i++) {
-            nameFiles = nameFiles+ " " + file[i].getName();
+            nameFiles = nameFiles+ " " + file[i].getPath();
+            listModel.addElement(nameFiles);
         }
-        nameField.setText(nameFiles);
+        fileChooserJList.setModel(listModel);
         nameField2.setText(String.valueOf(file.length));
+        
+      
     }//GEN-LAST:event_browseBtnActionPerformed
 
     private void browseBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseBtn1ActionPerformed
@@ -184,7 +223,7 @@ public class Documentgeneration extends javax.swing.JFrame {
 
     private void pdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfBtnActionPerformed
         dc=getDocumentGenerator.getDocument("pdf");
-        if(singleRadioBtn.isSelected())
+        if(checkBox.isSelected())
         {
             dc.generateSingleDocument(file,path);
         }
@@ -194,32 +233,43 @@ public class Documentgeneration extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_pdfBtnActionPerformed
 
+    private void fileChooserJListKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fileChooserJListKeyPressed
+        
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            // TODO add your handling code here:
+         for (int i = 0; i < file.length; i++) {
+             int  selectedItem =fileChooserJList.getSelectedIndex();
+             if (selectedItem != -1) {
+                listModel.remove(selectedItem);
+                int length=fileChooserJList.getModel().getSize();
+                nameField2.setText(String.valueOf(length));
+             }   
+         }
+                   
+       }
+    }//GEN-LAST:event_fileChooserJListKeyPressed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        AboutFrame aboutFrame=new AboutFrame();
+        aboutFrame.setSize(500,500);
+        aboutFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Documentgeneration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Documentgeneration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Documentgeneration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Documentgeneration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new Documentgeneration().setVisible(true);
+                new MainFrame().setVisible(true);
             }
         });
     }
@@ -228,12 +278,16 @@ public class Documentgeneration extends javax.swing.JFrame {
     private javax.swing.JButton browseBtn;
     private javax.swing.JButton browseBtn1;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox checkBox;
     private javax.swing.JButton docBtn;
-    private javax.swing.JRadioButton multipleRadioBtn;
-    private javax.swing.JTextField nameField;
+    private javax.swing.JList fileChooserJList;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameField1;
     private javax.swing.JTextField nameField2;
     private javax.swing.JButton pdfBtn;
-    private javax.swing.JRadioButton singleRadioBtn;
     // End of variables declaration//GEN-END:variables
 }
