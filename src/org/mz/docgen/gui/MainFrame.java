@@ -207,7 +207,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void docBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docBtnActionPerformed
         dc = getDocumentGenerator.getDocument("doc");
-        if (checkBox.isSelected()) {
+        if (!checkBox.isSelected()) {
             dc.generateSingleDocument(file, path);
         } else {
             dc.generateMultipleDocument(file, path);
