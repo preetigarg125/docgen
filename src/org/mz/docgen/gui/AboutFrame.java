@@ -16,6 +16,8 @@
  */
 package org.mz.docgen.gui;
 
+import javax.swing.UIManager;
+
 /**
  *
  * @author hemchander
@@ -26,16 +28,26 @@ public class AboutFrame extends javax.swing.JFrame {
      * Creates new form AboutFrame
      */
     public AboutFrame() {
-        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
         initComponents();
         aboutTextLbl.setText("<HTML>ABOUT METAZONE<br>" 
-                +"Metazone is a venture of innovative, dynamic professionals who bring in years<br>"
-                + " of collective experience in Software Development, Application Development, Web<br> "
-                + "Application Development, Web Marketing, Website Design and Software Maintenance.<br>"
-                + " Metazone is leading Software Development and training Company. Our wide collection<br>"
-                + " of software solutions and services includes software development, software enhancements,<br>"
-                + " software testing, support services and consulting for different domains such as Healthcare,<br> "
-                + "Finance, Travel, Retail and our client engagements include small as well as large companies.</HTML>");
+                +"Metazone is a venture of innovative, dynamic professionals who bring <br>"
+                + "in years of collective experience in Software Development, Application Development, Web Application Development,<br> "
+                + " Web Marketing, Website Design and Software Maintenance.<br>"
+                + " Metazone is leading Software Development and training Company. Our wide collection"
+                + " of software solutions and services<br> includes software development, software enhancements,<br>"
+                + " software testing, support services and consulting for different domains such as Healthcare, "
+                + "Finance, Travel, Retail and our client<br> engagements include small as well as large companies.</HTML>");
     }
 
     /**
@@ -73,37 +85,9 @@ public class AboutFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-  //  public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-      /*  try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AboutFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-       /* java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AboutFrame().setVisible(true);
-            }
-        });
-    }*/
+  
+            
+        
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aboutTextLbl;
