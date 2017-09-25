@@ -20,7 +20,7 @@ package org.mz.docgen.service;
  *
  * @author Payal
  */
-public class getDocumentGenerator {
+public class GetDocumentGenerator {
 
     public static DocumentGenerator getDocument(String doctype)
     {

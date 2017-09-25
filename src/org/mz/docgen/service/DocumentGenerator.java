@@ -17,14 +17,12 @@
 package org.mz.docgen.service;
 
 import java.io.File;
-import javax.swing.JFileChooser;
 
 /**
  *
  * @author Payal
  */
 public interface DocumentGenerator {
-    public abstract  void generateSingleDocument(File[] file,File path);
-    public abstract void generateMultipleDocument(File[] file,File path);
-    
+    public abstract  void generateSingleDocument(File[] files,File destinationFilePath);
+    public abstract void generateMultipleDocument(File[] files,File destinationFilePath);
 }

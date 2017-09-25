@@ -25,11 +25,6 @@ import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline
 
 public class CustomXWPFDocument extends XWPFDocument
 {
-    //public CustomXWPFDocument(InputStream in) throws IOException
-   // {
-     //   super(in);
-    //}
-
     public void createPicture(String blipId,int id, int width, int height)
     {
         final int EMU = 8000;
@@ -77,8 +72,6 @@ public class CustomXWPFDocument extends XWPFDocument
             xe.printStackTrace();
         }
         inline.set(xmlToken);
-        //graphicData.set(xmlToken);
-
         inline.setDistT(0);
         inline.setDistB(0);
         inline.setDistL(0);

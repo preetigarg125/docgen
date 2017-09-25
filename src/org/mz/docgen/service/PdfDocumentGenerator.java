@@ -17,16 +17,15 @@
 package org.mz.docgen.service;
 
 // javax.swing.text.Document;
-import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import java.io.File;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.itextpdf.text.*;
 import java.io.IOException;
 
 /**
@@ -35,73 +34,73 @@ import java.io.IOException;
  */
 public class PdfDocumentGenerator implements DocumentGenerator {
 
-    int counter = 1, counter1 = 1;
-    File[] file;
-    String pathFile;
-    Image image1;
+    private int counter = 1;
+    private String pathFile;
+    private Image image;
 
-    public void generateSingleDocument(File[] file, File path) {
+    @Override
+    public void generateSingleDocument(File[] files, File path) {
         Document document = new Document();
-        pathFile = file[0].getName() + counter + ".pdf";
+        pathFile = files[0].getName() + counter + ".pdf";
         counter++;
         try {
             PdfWriter.getInstance(document, new FileOutputStream(pathFile));
             document.open();
-            for (File file1 : file) {
+            for (File file1 : files) {
                 if (file1.exists()) {
-
-                    image1 = com.itextpdf.text.Image.getInstance(file1.getAbsolutePath());
-                    image1.scaleToFit(400, 400);
-                    image1.setAbsolutePosition(130f, PageSize.A4.getHeight() - image1.getScaledHeight() - 100f);
-                    image1.scaleAbsoluteHeight(300);
-                    image1.scaleAbsoluteWidth(300);
-                    image1.getAlignment();
-                    document.add((Element) image1);
+                    image = com.itextpdf.text.Image.getInstance(file1.getAbsolutePath());
+                    image.scaleToFit(400, 400);
+                    image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
+                    image.scaleAbsoluteHeight(300);
+                    image.scaleAbsoluteWidth(300);
+                    image.getAlignment();
+                    document.add((Element) image);
                     document.newPage();
                 }
             }
-                document.close();
+            
             save(pathFile, path);
         } catch (DocumentException | IOException ex) {
-            Logger.getLogger(PdfDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }finally{
+            document.close();
         }
     }
 
-    public void generateMultipleDocument(File[] file, File path) {
-        for (File file1 : file) {
+    @Override
+    public void generateMultipleDocument(File[] files, File destinationFilePath) {
+        for (File file : files) {
             Document document = new Document();
             try {
-                pathFile = file1.getName() + ".pdf";
+                pathFile = file.getName() + ".pdf";
                 PdfWriter.getInstance(document, new FileOutputStream(pathFile));
                 document.open();
-                if (file1.exists()) {
-                    try {
-                        image1 = com.itextpdf.text.Image.getInstance(file1.getAbsolutePath());
-                        image1.scaleToFit(400, 400);
-                        image1.setAbsolutePosition(130f, PageSize.A4.getHeight() - image1.getScaledHeight() - 100f);
-                        image1.scaleAbsoluteHeight(300);
-                        image1.scaleAbsoluteWidth(300);
-                        image1.getAlignment();
-                    } catch (BadElementException | IOException ex) {
-                        Logger.getLogger(PdfDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    document.add(image1);
+                if (file.exists()) {
+                    image = Image.getInstance(file.getAbsolutePath());
+                    image.scaleToFit(400, 400);
+                    image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
+                    image.scaleAbsoluteHeight(300);
+                    image.scaleAbsoluteWidth(300);
+                    image.getAlignment();
+                    document.add(image);
                 }
                 document.newPage();
-                 document.close();
-                save(pathFile, path);
-            } catch (DocumentException | FileNotFoundException ex) {
-                Logger.getLogger(PdfDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                save(pathFile, destinationFilePath);
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally{
+                document.close();
             }
         }
     }
 
     public void save(String pathFile, File path) {
         File file1 = new File(pathFile);
-
         File gg = new File(path, file1.getName());
         boolean success = file1.renameTo(gg);
-        System.out.print(success);
-
     }
 }

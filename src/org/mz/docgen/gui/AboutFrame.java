@@ -16,8 +16,13 @@
  */
 package org.mz.docgen.gui;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 
 /**
  *
@@ -30,6 +35,7 @@ public class AboutFrame extends javax.swing.JFrame {
      */
     public AboutFrame() {
         initComponents();
+        
     }
 
     /**
@@ -41,7 +47,9 @@ public class AboutFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aboutTextLbl = new javax.swing.JLabel();
+        aboutDocGenTextLbl1 = new javax.swing.JLabel();
+        mzImageLbl = new javax.swing.JLabel();
+        aboutMZTextLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About DocGen");
@@ -49,21 +57,47 @@ public class AboutFrame extends javax.swing.JFrame {
         setName("aboutFrame"); // NOI18N
         setResizable(false);
 
+        aboutDocGenTextLbl1.setText("<html><b>DocGen v1.0 </b><br><br>"
+            + "DocGen is a Word/PDF generating application."
+            + "<br>Specifically designed for generating PDF and "
+            + "<br>Doc Files from images."
+        );
+
+        try{
+            mzImageLbl.setIcon( new ImageIcon(ImageIO.read(getClass().getResource("/img/metazone.png")).getScaledInstance(319, 182, Image.SCALE_SMOOTH)));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        aboutMZTextLbl.setText("<html><br>This Application is <b>&copy;Designed and Developed"
+            + " by Metazone Infotech Pvt. Ltd.<b><br>"
+            + "<br>"
+            + "<b>Reach us:<b><br>"
+            + "Email: support@metazoneinfotech.com<br>"
+            + "Contact: 0129-4016337,+91-8510080900");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aboutTextLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(aboutMZTextLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                    .addComponent(mzImageLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(aboutDocGenTextLbl1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aboutTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addComponent(aboutDocGenTextLbl1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mzImageLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(aboutMZTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -71,6 +105,8 @@ public class AboutFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel aboutTextLbl;
+    private javax.swing.JLabel aboutDocGenTextLbl1;
+    private javax.swing.JLabel aboutMZTextLbl;
+    private javax.swing.JLabel mzImageLbl;
     // End of variables declaration//GEN-END:variables
 }

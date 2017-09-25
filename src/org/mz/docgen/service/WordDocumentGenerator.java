@@ -36,27 +36,36 @@ public class WordDocumentGenerator implements DocumentGenerator {
     String[] strArray = new String[10];
     FileOutputStream fos;
 
-    public void generateSingleDocument(File[] file, File path) {
-        pathFile = file[0].getName() + counter + ".docx";
+    @Override
+    public void generateSingleDocument(File[] files, File path) {
+        pathFile = files[0].getName() + counter + ".docx";
         counter++;
         CustomXWPFDocument document = new CustomXWPFDocument();
         try {
             fos = new FileOutputStream(new File(pathFile));
-            for (int i = 0; i < file.length; i++) {
+            for (int i = 0; i < files.length; i++) {
 
-                picId = document.addPictureData(new FileInputStream(new File(file[i].getAbsolutePath())), org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG);
+                picId = document.addPictureData(new FileInputStream(new File(files[i].getAbsolutePath())), org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG);
                 document.createPicture(strArray[i], document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 750, 600);
                 strArray[i] = picId;
             }
             document.write(fos);
-            fos.flush();
-            fos.close();
+            save(pathFile, path);//To change body of generated methods, choose Tools | Templates.
         } catch (IOException | InvalidFormatException ex) {
-            Logger.getLogger(WordDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }finally{
+            try {
+                fos.flush();
+            
+            fos.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
-        save(pathFile, path);//To change body of generated methods, choose Tools | Templates.
+        
     }
 
+    @Override
     public void generateMultipleDocument(File[] file, File path) {
         for (File file2 : file) {
             pathFile = file2.getName() + ".docx";
@@ -69,13 +78,18 @@ public class WordDocumentGenerator implements DocumentGenerator {
                 System.out.println(document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG));
                 document.createPicture(picId, document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 700, 600);
                 document.write(fos);
-                fos.flush();
-                fos.close();
                 save(pathFile, path);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(WordDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+               ex.printStackTrace();
             } catch (InvalidFormatException | IOException ex) {
-                Logger.getLogger(WordDocumentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+              ex.printStackTrace();
+            }finally{
+                try {
+                    fos.flush();
+                    fos.close();
+                    } catch (IOException ex) {
+                    ex.printStackTrace();
+                } 
             }
 
         }

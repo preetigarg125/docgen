@@ -16,7 +16,7 @@
  */
 package org.mz.docgen.gui;
 
-import org.mz.docgen.service.getDocumentGenerator;
+import org.mz.docgen.service.GetDocumentGenerator;
 import org.mz.docgen.service.DocumentGenerator;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -37,10 +37,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class MainFrame extends javax.swing.JFrame {
 
     String nameFiles = " ";
-    File[] file;
+    File[] files;
     File path;
-    // ButtonGroup buttonGroup=new ButtonGroup();
-    DocumentGenerator dc;
+    DocumentGenerator documentGenerator;
     boolean flag = true, flag1 = true;
     String[] strArray = new String[10];
     DefaultListModel listModel;
@@ -150,30 +149,28 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(destinationPathField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(imageListScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(imageListLbl, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(generatePdfBtn)
-                                .addGap(81, 81, 81)
-                                .addComponent(generateDocBtn)
-                                .addGap(8, 8, 8)))
-                        .addGap(2, 2, 2)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(imageCounterTextFld, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(imageBrowseBtn))
-                            .addComponent(destinationBrowseBtn, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(imageListLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(destinationLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(multiFileCheckBox))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(multiFileCheckBox)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(generatePdfBtn)
+                                    .addGap(81, 81, 81)
+                                    .addComponent(generateDocBtn))
+                                .addComponent(destinationPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(destinationBrowseBtn))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(imageListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(9, 9, 9)
+                            .addComponent(imageCounterTextFld, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(imageBrowseBtn))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,53 +205,51 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateDocBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateDocBtnActionPerformed
-        dc = getDocumentGenerator.getDocument("doc");
+        documentGenerator = GetDocumentGenerator.getDocument("doc");
         if (!multiFileCheckBox.isSelected()) {
-            dc.generateSingleDocument(file, path);
+            documentGenerator.generateSingleDocument(files, path);
         } else {
-            dc.generateMultipleDocument(file, path);
+            documentGenerator.generateMultipleDocument(files, path);
         }
     }//GEN-LAST:event_generateDocBtnActionPerformed
 
     private void imageBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowseBtnActionPerformed
         listModel = new DefaultListModel();
         imageFileChooser.showOpenDialog(null);
-        file = imageFileChooser.getSelectedFiles();
-        for (int i = 0; i < file.length; i++) {
-            nameFiles = nameFiles + " " + file[i].getPath();
+        files = imageFileChooser.getSelectedFiles();
+        for (int i = 0; i < files.length; i++) {
+            nameFiles = nameFiles + " " + files[i].getPath();
             listModel.addElement(nameFiles);
         }
         imageList.setModel(listModel);
-        imageCounterTextFld.setText(String.valueOf(file.length));
+        imageCounterTextFld.setText(String.valueOf(files.length));
 
 
     }//GEN-LAST:event_imageBrowseBtnActionPerformed
 
     private void destinationBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destinationBrowseBtnActionPerformed
-        //fileChooser1 = new JFileChooser();
-        //fileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        //fileChooser1.showOpenDialog(null);
-        //destinationPathField.setText(fileChooser1.getSelectedFile().getAbsolutePath());
-        //path = new File(fileChooser1.getSelectedFile().getAbsolutePath());
-        //System.out.print(fileChooser1.getSelectedFile().canWrite());
+        destinationPathChooser = new JFileChooser();
+        destinationPathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+         destinationPathChooser.showOpenDialog(null);
+        destinationPathField.setText(destinationPathChooser.getSelectedFile().getAbsolutePath());
+        path = new File(destinationPathChooser.getSelectedFile().getAbsolutePath());
+        System.out.print(destinationPathChooser.getSelectedFile().canWrite());
     }//GEN-LAST:event_destinationBrowseBtnActionPerformed
 
     private void generatePdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePdfBtnActionPerformed
-        dc = getDocumentGenerator.getDocument("pdf");
+        documentGenerator = GetDocumentGenerator.getDocument("pdf");
         if (!multiFileCheckBox.isSelected()) {
-            dc.generateSingleDocument(file, path);
+            documentGenerator.generateSingleDocument(files, path);
         } else {
            
-            dc.generateMultipleDocument(file, path);
-             System.out.print("multiple");
+            documentGenerator.generateMultipleDocument(files, path);
         }
     }//GEN-LAST:event_generatePdfBtnActionPerformed
 
     private void imageListKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageListKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            // TODO add your handling code here:
-            for (int i = 0; i < file.length; i++) {
+            for (int i = 0; i < files.length; i++) {
                 int selectedItem = imageList.getSelectedIndex();
                 if (selectedItem != -1) {
                     listModel.remove(selectedItem);
