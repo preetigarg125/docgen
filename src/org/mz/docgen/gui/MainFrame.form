@@ -4,6 +4,9 @@
   <NonVisualComponents>
     <Component class="javax.swing.JFileChooser" name="imageFileChooser">
       <Properties>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new File(&quot;user.home&quot;)" type="code"/>
+        </Property>
         <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new FileNameExtensionFilter(&quot;Image Files&quot;, &quot;jpg&quot;, &quot;png&quot;, &quot;tif&quot;, &quot;jpeg&quot;)" type="code"/>
         </Property>
@@ -13,6 +16,9 @@
     </Component>
     <Component class="javax.swing.JFileChooser" name="destinationPathChooser">
       <Properties>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new File(&quot;user.home&quot;)" type="code"/>
+        </Property>
         <Property name="fileSelectionMode" type="int" value="1"/>
       </Properties>
     </Component>
@@ -153,17 +159,19 @@
     <Component class="javax.swing.JButton" name="generatePdfBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Generate Pdf"/>
+        <Property name="name" type="java.lang.String" value="PDF" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generatePdfBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="generateDocBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Generate Doc"/>
+        <Property name="name" type="java.lang.String" value="WORD" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateDocBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="imageCounterTextFld">
@@ -180,8 +188,8 @@
       <SubComponents>
         <Component class="javax.swing.JList" name="imageList">
           <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultListModel&lt;File&gt;()&#xa;" type="code"/>
             </Property>
           </Properties>
           <Events>

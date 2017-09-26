@@ -23,6 +23,8 @@ import java.io.File;
  * @author Payal
  */
 public interface DocumentGenerator {
-    public abstract  void generateSingleDocument(File[] files,File destinationFilePath);
-    public abstract void generateMultipleDocument(File[] files,File destinationFilePath);
+    
+    int generateSingleDocument(File[] files, File destinationFilePath);
+    
+    int generateMultipleDocument(File[] files, File destinationFilePath);
 }

@@ -20,15 +20,21 @@ package org.mz.docgen.service;
  *
  * @author Payal
  */
-public class GetDocumentGenerator {
+public class DocGeneratorFactory {
+    
+    public static final int PDF = 0;
+    public static final int WORD =1; 
 
-    public static DocumentGenerator getDocument(String doctype)
+    public static DocumentGenerator getGenerator(int DOCTYPE)
     {
-        if(doctype.equals("pdf"))
-            return(new PdfDocumentGenerator());
-        else if(doctype.equals("doc"))
-            return(new WordDocumentGenerator());
-       return(new WordDocumentGenerator());
+        switch(DOCTYPE){
+            case PDF:
+                return new PdfDocumentGenerator();
+            case WORD:
+                return new WordDocumentGenerator();
+            default:
+                return null;
+        }
     }
 }
 

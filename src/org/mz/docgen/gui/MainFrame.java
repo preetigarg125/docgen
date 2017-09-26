@@ -16,17 +16,15 @@
  */
 package org.mz.docgen.gui;
 
-import org.mz.docgen.service.GetDocumentGenerator;
+import org.mz.docgen.service.DocGeneratorFactory;
 import org.mz.docgen.service.DocumentGenerator;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -36,13 +34,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    String nameFiles = " ";
-    File[] files;
-    File path;
-    DocumentGenerator documentGenerator;
-    boolean flag = true, flag1 = true;
-    String[] strArray = new String[10];
-    DefaultListModel listModel;
 
     public MainFrame() {
         initComponents();
@@ -74,10 +65,12 @@ public class MainFrame extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
+        imageFileChooser.setCurrentDirectory(new File("user.home"));
         imageFileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "tif", "jpeg"));
         imageFileChooser.setToolTipText("");
         imageFileChooser.setMultiSelectionEnabled(true);
 
+        destinationPathChooser.setCurrentDirectory(new File("user.home"));
         destinationPathChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -102,21 +95,25 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         generatePdfBtn.setText("Generate Pdf");
+        generatePdfBtn.setName("PDF"); // NOI18N
         generatePdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generatePdfBtnActionPerformed(evt);
+                generateBtnActionPerformed(evt);
             }
         });
 
         generateDocBtn.setText("Generate Doc");
+        generateDocBtn.setName("WORD"); // NOI18N
         generateDocBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generateDocBtnActionPerformed(evt);
+                generateBtnActionPerformed(evt);
             }
         });
 
         imageCounterTextFld.setEditable(false);
 
+        imageList.setModel(new DefaultListModel<File>()
+        );
         imageList.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 imageListKeyPressed(evt);
@@ -204,66 +201,61 @@ public class MainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void generateDocBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateDocBtnActionPerformed
-        documentGenerator = GetDocumentGenerator.getDocument("doc");
-        if (!multiFileCheckBox.isSelected()) {
-            documentGenerator.generateSingleDocument(files, path);
-        } else {
-            documentGenerator.generateMultipleDocument(files, path);
-        }
-    }//GEN-LAST:event_generateDocBtnActionPerformed
-
     private void imageBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowseBtnActionPerformed
-        listModel = new DefaultListModel();
-        imageFileChooser.showOpenDialog(null);
-        files = imageFileChooser.getSelectedFiles();
-        for (int i = 0; i < files.length; i++) {
-            nameFiles = nameFiles + " " + files[i].getPath();
-            listModel.addElement(nameFiles);
-        }
-        imageList.setModel(listModel);
-        imageCounterTextFld.setText(String.valueOf(files.length));
-
-
+       DefaultListModel listModel = (DefaultListModel)imageList.getModel();    
+       if (imageFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        for (File file : imageFileChooser.getSelectedFiles()) {
+            listModel.addElement(file);
+        }     
+       }
+       imageCounterTextFld.setText(String.valueOf(listModel.getSize()));
     }//GEN-LAST:event_imageBrowseBtnActionPerformed
 
     private void destinationBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destinationBrowseBtnActionPerformed
-        destinationPathChooser = new JFileChooser();
-        destinationPathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-         destinationPathChooser.showOpenDialog(null);
-        destinationPathField.setText(destinationPathChooser.getSelectedFile().getAbsolutePath());
-        path = new File(destinationPathChooser.getSelectedFile().getAbsolutePath());
-        System.out.print(destinationPathChooser.getSelectedFile().canWrite());
+        if (destinationPathChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            destinationPathField.setText(destinationPathChooser.getSelectedFile().getAbsolutePath());
+            //System.out.print(destinationPathChooser.getSelectedFile().canWrite());
+        }
     }//GEN-LAST:event_destinationBrowseBtnActionPerformed
 
-    private void generatePdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePdfBtnActionPerformed
-        documentGenerator = GetDocumentGenerator.getDocument("pdf");
-        if (!multiFileCheckBox.isSelected()) {
-            documentGenerator.generateSingleDocument(files, path);
-        } else {
-           
-            documentGenerator.generateMultipleDocument(files, path);
-        }
-    }//GEN-LAST:event_generatePdfBtnActionPerformed
-
     private void imageListKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageListKeyPressed
-
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            for (int i = 0; i < files.length; i++) {
-                int selectedItem = imageList.getSelectedIndex();
-                if (selectedItem != -1) {
-                    listModel.remove(selectedItem);
-                    int length = imageList.getModel().getSize();
-                    imageCounterTextFld.setText(String.valueOf(length));
-                }
+            DefaultListModel listModel = (DefaultListModel)imageList.getModel();
+            int[] selectedIndices =imageList.getSelectedIndices();
+            for (int i =selectedIndices.length-1;i>=0;i--) {
+                listModel.removeElementAt(selectedIndices[i]);
             }
-
+            imageCounterTextFld.setText(String.valueOf(listModel.getSize()));
         }
     }//GEN-LAST:event_imageListKeyPressed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         new AboutFrame().setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+    private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
+        if(imageList.getModel().getSize() <= 0 || destinationPathField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Source OR Destination missing!");
+            return;
+        }
+        int DOCTYPE = ((JButton)evt.getSource()).getName().equals("PDF")? 0:1;
+        DocumentGenerator docGenerator = DocGeneratorFactory.getGenerator(DOCTYPE);
+        File[] files = new File[imageList.getModel().getSize()];
+        for(int i=0; i<imageList.getModel().getSize();i++){
+            files[i] = (File)((DefaultListModel)imageList.getModel()).get(i);
+        }    
+        File destination = new File(destinationPathField.getText());
+        int result;
+        if (multiFileCheckBox.isSelected()) {
+           result = docGenerator.generateMultipleDocument(files, destination);
+        } else {
+           result = docGenerator.generateSingleDocument(files, destination);
+        }
+        if(result == 1)
+            JOptionPane.showMessageDialog(this, "Document Successfully Created!");
+        else
+            JOptionPane.showMessageDialog(this, "Error Creating Document!");
+    }//GEN-LAST:event_generateBtnActionPerformed
 
     /**
      * @param args the command line arguments

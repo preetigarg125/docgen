@@ -24,7 +24,6 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -34,73 +33,42 @@ import java.io.IOException;
  */
 public class PdfDocumentGenerator implements DocumentGenerator {
 
-    private int counter = 1;
-    private String pathFile;
-    private Image image;
-
     @Override
-    public void generateSingleDocument(File[] files, File path) {
-        Document document = new Document();
-        pathFile = files[0].getName() + counter + ".pdf";
-        counter++;
+    public int generateSingleDocument(File[] files, File destination) {
+        File pdf = new File(destination, files[0].getName() + ".pdf");
+        Document pdfDoc = new Document();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(pathFile));
-            document.open();
-            for (File file1 : files) {
-                if (file1.exists()) {
-                    image = com.itextpdf.text.Image.getInstance(file1.getAbsolutePath());
-                    image.scaleToFit(400, 400);
-                    image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
-                    image.scaleAbsoluteHeight(300);
-                    image.scaleAbsoluteWidth(300);
-                    image.getAlignment();
-                    document.add((Element) image);
-                    document.newPage();
-                }
-            }
-            
-            save(pathFile, path);
-        } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
-        }finally{
-            document.close();
-        }
-    }
-
-    @Override
-    public void generateMultipleDocument(File[] files, File destinationFilePath) {
-        for (File file : files) {
-            Document document = new Document();
-            try {
-                pathFile = file.getName() + ".pdf";
-                PdfWriter.getInstance(document, new FileOutputStream(pathFile));
-                document.open();
+            PdfWriter.getInstance(pdfDoc, new FileOutputStream(pdf));
+            pdfDoc.open();
+            Image image;
+            for (File file : files) {
                 if (file.exists()) {
                     image = Image.getInstance(file.getAbsolutePath());
                     image.scaleToFit(400, 400);
                     image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
                     image.scaleAbsoluteHeight(300);
                     image.scaleAbsoluteWidth(300);
-                    image.getAlignment();
-                    document.add(image);
+                    pdfDoc.add((Element) image);
+                    pdfDoc.newPage();
                 }
-                document.newPage();
-                save(pathFile, destinationFilePath);
-            } catch (DocumentException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally{
-                document.close();
             }
+            return 1;
+        } catch (DocumentException | IOException ex) {
+            ex.printStackTrace();
+        }finally{
+            pdfDoc.close();
         }
+        return 0;
     }
 
-    public void save(String pathFile, File path) {
-        File file1 = new File(pathFile);
-        File gg = new File(path, file1.getName());
-        boolean success = file1.renameTo(gg);
+    @Override
+    public int generateMultipleDocument(File[] files, File destinationFilePath) {
+        int result = 1;
+        File[] singleFileArray = new File[1];
+        for (File file : files) {
+            singleFileArray[0] = file;
+            result = result & generateSingleDocument(singleFileArray, destinationFilePath);
+        }
+        return result;
     }
 }
