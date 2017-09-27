@@ -18,11 +18,8 @@ package org.mz.docgen.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
@@ -30,75 +27,42 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author Payal
  */
 public class WordDocumentGenerator implements DocumentGenerator {
-
-    int counter = 1;
-    String picId, pathFile;
-    String[] strArray = new String[10];
-    FileOutputStream fos;
-
+    
     @Override
-    public void generateSingleDocument(File[] files, File path) {
-        pathFile = files[0].getName() + counter + ".docx";
-        counter++;
-        CustomXWPFDocument document = new CustomXWPFDocument();
+    public int generateSingleDocument(File[] files, File destination) {
+         FileOutputStream fos = null;
+          File wordDoc = new File(destination, files[0].getName() + ".docx");  
+         CustomXWPFDocument document = new CustomXWPFDocument();
         try {
-            fos = new FileOutputStream(new File(pathFile));
+            String picId;
+            fos = new FileOutputStream(wordDoc);
             for (int i = 0; i < files.length; i++) {
-
                 picId = document.addPictureData(new FileInputStream(new File(files[i].getAbsolutePath())), org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG);
-                document.createPicture(strArray[i], document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 750, 600);
-                strArray[i] = picId;
+                document.createPicture(picId, document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 750,600);
             }
-            document.write(fos);
-            save(pathFile, path);//To change body of generated methods, choose Tools | Templates.
+             document.write(fos);
+        return 1;
         } catch (IOException | InvalidFormatException ex) {
             ex.printStackTrace();
         }finally{
             try {
-                fos.flush();
-            
+                fos.flush(); 
             fos.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        
+        return 0; 
     }
-
     @Override
-    public void generateMultipleDocument(File[] file, File path) {
-        for (File file2 : file) {
-            pathFile = file2.getName() + ".docx";
-            CustomXWPFDocument document = new CustomXWPFDocument();
-            try {
-                fos = new FileOutputStream(new File(pathFile));
-
-                picId = document.addPictureData(new FileInputStream(new File(file2.getAbsolutePath())), org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG);
-
-                System.out.println(document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG));
-                document.createPicture(picId, document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 700, 600);
-                document.write(fos);
-                save(pathFile, path);
-            } catch (FileNotFoundException ex) {
-               ex.printStackTrace();
-            } catch (InvalidFormatException | IOException ex) {
-              ex.printStackTrace();
-            }finally{
-                try {
-                    fos.flush();
-                    fos.close();
-                    } catch (IOException ex) {
-                    ex.printStackTrace();
-                } 
-            }
-
+    public int generateMultipleDocument(File[] files, File destinationFilePath) {
+        int result = 1;
+        File[] singleFileArray = new File[1]; 
+        
+        for (File file : files) {
+            singleFileArray[0] = file;
+            result = result & generateSingleDocument(singleFileArray, destinationFilePath);
         }
-    }
-
-    public void save(String pathFile, File path) {
-        File file1 = new File(pathFile);
-        File gg = new File(path, file1.getName());
-        boolean success = file1.renameTo(gg);
-        System.out.print(success);
+        return result;
     }
 }

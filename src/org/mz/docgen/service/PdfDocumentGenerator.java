@@ -46,8 +46,8 @@ public class PdfDocumentGenerator implements DocumentGenerator {
                     image = Image.getInstance(file.getAbsolutePath());
                     image.scaleToFit(400, 400);
                     image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
-                    image.scaleAbsoluteHeight(300);
-                    image.scaleAbsoluteWidth(300);
+                   // image.scaleAbsoluteHeight(300);
+                  //  image.scaleAbsoluteWidth(300);
                     pdfDoc.add((Element) image);
                     pdfDoc.newPage();
                 }
