@@ -26,13 +26,15 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Payal
  */
 public class PdfDocumentGenerator implements DocumentGenerator {
-
+     private static final Logger logger = LogManager.getLogger(PdfDocumentGenerator.class.getName());
     @Override
     public int generateSingleDocument(File[] files, File destination) {
         File pdf = new File(destination, files[0].getName() + ".pdf");
@@ -46,15 +48,16 @@ public class PdfDocumentGenerator implements DocumentGenerator {
                     image = Image.getInstance(file.getAbsolutePath());
                     image.scaleToFit(400, 400);
                     image.setAbsolutePosition(130f, PageSize.A4.getHeight() - image.getScaledHeight() - 100f);
-                   // image.scaleAbsoluteHeight(300);
-                  //  image.scaleAbsoluteWidth(300);
+                   image.scaleAbsoluteHeight(300);
+                   image.scaleAbsoluteWidth(300);
                     pdfDoc.add((Element) image);
                     pdfDoc.newPage();
                 }
             }
+             logger.info("files generated");
             return 1;
         } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage(),ex);
         }finally{
             pdfDoc.close();
         }
@@ -68,7 +71,9 @@ public class PdfDocumentGenerator implements DocumentGenerator {
         for (File file : files) {
             singleFileArray[0] = file;
             result = result & generateSingleDocument(singleFileArray, destinationFilePath);
+            
         }
+        logger.info("multiple Files generated");
         return result;
     }
 }

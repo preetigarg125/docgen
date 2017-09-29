@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
@@ -27,6 +29,8 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author Payal
  */
 public class WordDocumentGenerator implements DocumentGenerator {
+    
+    private static final Logger logger = LogManager.getLogger(WordDocumentGenerator.class.getName());
     
     @Override
     public int generateSingleDocument(File[] files, File destination) {
@@ -41,15 +45,16 @@ public class WordDocumentGenerator implements DocumentGenerator {
                 document.createPicture(picId, document.getNextPicNameNumber(org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG), 750,600);
             }
              document.write(fos);
+             logger.info("single WordDocument generated");
         return 1;
         } catch (IOException | InvalidFormatException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage(),ex);
         }finally{
             try {
                 fos.flush(); 
             fos.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+               logger.error(ex.getMessage(),ex);
             }
         }
         return 0; 
@@ -63,6 +68,7 @@ public class WordDocumentGenerator implements DocumentGenerator {
             singleFileArray[0] = file;
             result = result & generateSingleDocument(singleFileArray, destinationFilePath);
         }
+        logger.info("Multiple WordDocument generated");
         return result;
     }
 }
