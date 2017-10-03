@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
  */
 public class PdfDocumentGenerator implements DocumentGenerator {
 
-    private static final Logger logger = LogManager.getLogger(PdfDocumentGenerator.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(PdfDocumentGenerator.class.getName());
 
     @Override
     public int generateSingleDocument(File[] files, File destination) {
@@ -55,10 +55,10 @@ public class PdfDocumentGenerator implements DocumentGenerator {
                     pdfDoc.newPage();
                 }
             }
-            logger.info("files generated");
+            LOGGER.info("files generated");
             return 1;
         } catch (DocumentException | IOException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
         } finally {
             pdfDoc.close();
         }
@@ -74,7 +74,7 @@ public class PdfDocumentGenerator implements DocumentGenerator {
             result = result & generateSingleDocument(singleFileArray, destinationFilePath);
 
         }
-        logger.info("multiple Files generated");
+        LOGGER.info("multiple Files generated");
         return result;
     }
 }

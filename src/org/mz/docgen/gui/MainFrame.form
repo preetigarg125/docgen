@@ -4,6 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.swing.JFileChooser" name="imageFileChooser">
       <Properties>
+        <Property name="acceptAllFileFilterUsed" type="boolean" value="false"/>
         <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new File(&quot;user.home&quot;)" type="code"/>
         </Property>

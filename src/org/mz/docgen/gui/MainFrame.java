@@ -27,6 +27,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
@@ -64,6 +66,7 @@ public class MainFrame extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
+        imageFileChooser.setAcceptAllFileFilterUsed(false);
         imageFileChooser.setCurrentDirectory(new File("user.home"));
         imageFileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "tif", "jpeg"));
         imageFileChooser.setToolTipText("");
